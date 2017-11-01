@@ -31,10 +31,39 @@ class DefaultController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         
         $repoPeliculas = $em->getRepository('AppBundle:Pelicula');
+        $output = array();
         
         $peliculas = $repoPeliculas->findAll();
         
-        return new View($peliculas, Response::HTTP_OK);
+        foreach($peliculas as $pelicula) {
+            
+            //categoría
+            $categoria = array(
+                'id'     => $pelicula->getCategoria()->getId(),
+                'nombre' => $pelicula->getCategoria()->getNombre()
+            );
+            
+            //actores
+            $actores = array();
+            foreach ($pelicula->getActors() as $actor) {
+                $actores[] = array(
+                    'id'             => $actor->getId(),
+                    'nombre'         => $actor->getNombre(),
+                    'anioNacimiento' => $actor->getAnioNacimiento()
+                );
+            }
+            
+            //peliculas
+            $output[] = array(
+                'id'          => $pelicula->getId(),
+                'nombre'      => $pelicula->getNombre(),
+                'descripcion' => $pelicula->getDescripcion(),
+                'categoria'   => $categoria,
+                'actors'      => $actores,
+            );
+        }
+        
+        return new View($output, Response::HTTP_OK);
     }
     
     
