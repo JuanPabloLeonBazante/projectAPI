@@ -45,6 +45,28 @@ class Pelicula
      */
     private $categoria;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Actor", inversedBy="peliculas")
+     * @ORM\JoinTable(name="pelicula_actor",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="pelicula_id", referencedColumnName="id", onDelete="CASCADE")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="actor_id", referencedColumnName="id", onDelete="CASCADE")
+     *   }
+     * )
+     */
+    private $actors;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->actors = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -126,6 +148,40 @@ class Pelicula
     public function getCategoria()
     {
         return $this->categoria;
+    }
+
+    /**
+     * Add actor
+     *
+     * @param \AppBundle\Entity\Actor $actor
+     *
+     * @return Pelicula
+     */
+    public function addActor(\AppBundle\Entity\Actor $actor)
+    {
+        $this->actors[] = $actor;
+
+        return $this;
+    }
+
+    /**
+     * Remove actor
+     *
+     * @param \AppBundle\Entity\Actor $actor
+     */
+    public function removeActor(\AppBundle\Entity\Actor $actor)
+    {
+        $this->actors->removeElement($actor);
+    }
+
+    /**
+     * Get actors
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActors()
+    {
+        return $this->actors;
     }
 }
 
