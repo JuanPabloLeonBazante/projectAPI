@@ -66,6 +66,47 @@ class DefaultController extends FOSRestController
         return new View($output, Response::HTTP_OK);
     }
     
+    /**
+     * @Rest\Get("/peliculas/{id}")
+     */
+    public function peliculaAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $repoPeliculas = $em->getRepository('AppBundle:Pelicula');
+        $output = array();
+        
+        $pelicula = $repoPeliculas->find($id);
+        
+            
+        //categoría
+        $categoria = array(
+            'id'     => $pelicula->getCategoria()->getId(),
+            'nombre' => $pelicula->getCategoria()->getNombre()
+        );
+        
+        //actores
+        $actores = array();
+        foreach ($pelicula->getActors() as $actor) {
+            $actores[] = array(
+                'id'             => $actor->getId(),
+                'nombre'         => $actor->getNombre(),
+                'anioNacimiento' => $actor->getAnioNacimiento()
+            );
+        }
+        
+        //peliculas
+        $output[] = array(
+            'id'          => $pelicula->getId(),
+            'nombre'      => $pelicula->getNombre(),
+            'descripcion' => $pelicula->getDescripcion(),
+            'categoria'   => $categoria,
+            'actors'      => $actores,
+        );
+        
+        return new View($output, Response::HTTP_OK);
+    }
+    
     
     
 }
