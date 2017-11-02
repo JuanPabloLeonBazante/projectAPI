@@ -61,6 +61,16 @@ class Pelicula
     private $actors;
 
     /**
+     * @var \AppBundle\Entity\Pais
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Pais", inversedBy="peliculas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="pais_id", referencedColumnName="id")
+     * })
+     */
+    private $pais;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -182,6 +192,30 @@ class Pelicula
     public function getActors()
     {
         return $this->actors;
+    }
+
+    /**
+     * Set pais
+     *
+     * @param \AppBundle\Entity\Pais $pais
+     *
+     * @return Pelicula
+     */
+    public function setPais(\AppBundle\Entity\Pais $pais = null)
+    {
+        $this->pais = $pais;
+
+        return $this;
+    }
+
+    /**
+     * Get pais
+     *
+     * @return \AppBundle\Entity\Pais
+     */
+    public function getPais()
+    {
+        return $this->pais;
     }
 }
 
